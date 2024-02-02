@@ -44,13 +44,13 @@ const Layout = () => {
             tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="message-outline" color={color} size={size} />
           }}
         />
-        {/* <Tabs.Screen
-          name="wishlist"
+        <Tabs.Screen
+          name="profile"
           options={{
             tabBarLabel: 'Wishlist',
-            tabBarIcon: ({ color, size }) => <Ionicons name="heart-outline" color={color} size={size} />
+            tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" color={color} size={size} />
           }}
-        /> */}
+        />
     </Tabs>
   )
 }
