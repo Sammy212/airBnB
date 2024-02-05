@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 
 // Category Data
@@ -39,14 +40,27 @@ const categories = [
     },
 ];
 
-const ExploreHeader = () => {
+interface Props {
+  onCategoryChanged: (category: string) => void
+}
+
+const ExploreHeader = ({ onCategoryChanged }: Props) => {
+  const scrollRef = useRef<ScrollView>(null);
   
   // Tract active|selected categories
   const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const selectCategory = (index: number) => {
+    const selected = itemsRef.current[index];
     setActiveIndex(index);
+
+    selected?.measure((x) => {
+      scrollRef.current?.scrollTo({ x: x -16, y: 0, animated: true });
+    })
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    onCategoryChanged(categories[index].name)
   };
 
   return (
@@ -69,7 +83,8 @@ const ExploreHeader = () => {
             </View>
 
             <ScrollView 
-              horizontal 
+              ref={scrollRef}
+              horizontal={true} 
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.mainCat} 
               // need more research why contentContainerStyle rather than default style
@@ -141,7 +156,7 @@ const styles = StyleSheet.create({
   },
   mainCat: {
     alignItems: 'center',
-    gap: 20,
+    gap: 30,
     paddingHorizontal: 16,
   },
   categoryText: {
