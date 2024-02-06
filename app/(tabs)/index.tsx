@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import React, { useMemo, useState } from 'react';
 import { Link, Stack } from 'expo-router';
 import ExploreHeader from '@/components/ExploreHeader';
@@ -14,7 +14,7 @@ const Page = () => {
     setCategory(category);
   };
   return (
-    <View style={{ flex: 1, marginTop: 140 }}>
+    <View style={{ flex: 1, marginTop: 95, ...Platform.select({ android: {marginTop: 130,} }), }}>
       <Stack.Screen 
         options={{
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />,
